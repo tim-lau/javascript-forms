@@ -12,7 +12,19 @@
 * */
 function onReady() {
     var standings = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Super Senior!'];
-
+    
+    var elem = document.getElementById("standing");
+    for (var i = 0; i <  standings.length; i++) {
+        var opt = document.createElement("option");
+        opt.value = standings[i];
+        var text = document.createTextNode(standings[i]);
+        opt.appendChild(text);
+        elem.appendChild(opt);
+    }
+    
+    var ourform = document.getElementById("person-form");
+    ourform.addEventListener('submit', onSubmit);
+    //ourform.addEventListener for scope. this form, not just any form
 } //onReady()
 
 /* onSubmit()
@@ -23,7 +35,7 @@ function onReady() {
  * */
 function onSubmit(evt) {
     var valid = validateForm(this);
-
+    console.log("onSubmit Worked!!");
     //if the form is invalid and the event object has a method called preventDefault,
     //call it to stop the form from being submitted to the server
     //this method is now part of the standard, but it's new, so older browsers
@@ -50,7 +62,12 @@ function onSubmit(evt) {
 * */
 function validateForm(form) {
     var requiredFields = ['firstName', 'lastName', 'standing', 'age'];
+    //if you wanted to require emails. you could add it to this array, and update the HTML class required-field 
+    //to the notation
 
+    requiredFields.forEach(validateRequiredField, form);
+
+    //return true;
 } //validateForm()
 
 /* validateRequiredField()
@@ -59,6 +76,17 @@ function validateForm(form) {
 * */
 function validateRequiredField(field) {
 
+    if (0 == this[field].value.trim().length) {
+        this[field].className = 'invalid-field form-control';
+        return false;
+        // setting className to invalid-field but keep the bootstrap form-control in there
+    } else {
+        this[field].className = 'form-control';
+        return true;
+    }
+
+
 } //validateRequiredField()
 
+// when all content has been loaded, let's run onR
 document.addEventListener('DOMContentLoaded', onReady);
